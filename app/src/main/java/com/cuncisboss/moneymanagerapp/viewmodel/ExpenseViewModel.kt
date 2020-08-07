@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
 
-    val incomeAdapter = DashboardAdapter()
-    val expenseAdapter = DashboardAdapter()
+    val incomeAdapter = DashboardAdapter("Income")
+    val expenseAdapter = DashboardAdapter("Expense")
 
     val adapter = ExpenseAdapter()
 
@@ -25,6 +25,7 @@ class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
     var expenseTotal = MutableLiveData<String>()
 
     private lateinit var navigator: Navigator
+
 
     fun setIncomeTotal(list: List<ExpenseModel>) {
         var total = 0.0
@@ -56,6 +57,14 @@ class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
 
     fun getAllExpense(): LiveData<List<ExpenseModel>> {
         return expenseDao.getAllExpense()
+    }
+
+    fun update(expense: ExpenseModel) = viewModelScope.launch {
+        expenseDao.update(expense)
+    }
+
+    fun delete(expense: ExpenseModel) = viewModelScope.launch {
+        expenseDao.delete(expense)
     }
 
     fun clickListener() {

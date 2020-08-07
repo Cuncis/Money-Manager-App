@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cuncisboss.moneymanagerapp.R
 import com.cuncisboss.moneymanagerapp.databinding.FragmentDashboardBinding
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
@@ -40,6 +42,8 @@ class DashboardFragment : Fragment(), Navigator {
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
         viewModel.setNavigator(this)
+        viewModel.incomeAdapter.setNavigator(this)
+        viewModel.expenseAdapter.setNavigator(this)
 
         observeViewModel()
     }
@@ -68,15 +72,26 @@ class DashboardFragment : Fragment(), Navigator {
         })
     }
 
-    private fun dialogInsert() {
+    private fun dialogInsertUpdate(expense: ExpenseModel = ExpenseModel()) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(false)
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_insert_update, null as ViewGroup?)
         builder.setView(view)
 
         var type = ""
-
         val dialog = builder.create()
+
+        if (expense.note.isNotEmpty()) {
+            type = expense.type
+            if (expense.type.equals("income", true)) {
+                view.sp_type.setSelection(0)
+            } else {
+                view.sp_type.setSelection(1)
+            }
+            view.et_amount.setText(expense.nominal.toString())
+            view.et_note.setText(expense.note)
+            view.btnSave.text = "Update"
+        }
 
         view.sp_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
@@ -99,11 +114,15 @@ class DashboardFragment : Fragment(), Navigator {
             val amount = view.et_amount.text.toString().toLong()
             val note = view.et_note.text.toString()
 
-            viewModel.insert(ExpenseModel(
-                note,
-                type,
-                amount
-            ))
+            if (expense.note.isNotEmpty()) {
+                viewModel.update(ExpenseModel(note, type, amount, expense.datetime, expense.id))
+            } else {
+                viewModel.insert(ExpenseModel(
+                    note,
+                    type,
+                    amount
+                ))
+            }
             dialog.dismiss()
         }
 
@@ -111,9 +130,36 @@ class DashboardFragment : Fragment(), Navigator {
     }
 
     override fun dialogClick() {
-        dialogInsert()
+        dialogInsertUpdate()
     }
 
+    private fun dialogAlert(expense: ExpenseModel, type: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(true)
+
+        val list = arrayOf("Update", "Delete")
+        builder.setItems(list) { dialog, position ->
+            if (list[position].equals("update", true)) {
+                dialogInsertUpdate(expense)
+            } else {
+                viewModel.delete(expense)
+            }
+            dialog.dismiss()
+        }
+        builder.create().show()
+    }
+
+    override fun onMoreClick(type: String) {
+        if (type.equals("income", true)) {
+            findNavController().navigate(R.id.action_dashboardFragment_to_incomeFragment)
+        } else if (type.equals("expense", true)){
+            findNavController().navigate(R.id.action_dashboardFragment_to_expenseFragment)
+        }
+    }
+
+    override fun onDialogClick(expense: ExpenseModel, type: String) {
+        dialogAlert(expense, type)
+    }
 }
 
 

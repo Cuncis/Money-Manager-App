@@ -9,6 +9,8 @@ object Constants {
     const val INCOME_TEXT = "Income"
     const val EXPENSE_TEXT = "Expense"
 
+    const val LIMIT_ITEM = 5
+
     fun List<ExpenseModel>.reverseThis() {
         (this as ArrayList).reverse()
     }
