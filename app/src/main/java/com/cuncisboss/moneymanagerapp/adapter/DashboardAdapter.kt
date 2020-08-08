@@ -72,7 +72,7 @@ class DashboardAdapter(val type: String) : RecyclerView.Adapter<RecyclerView.Vie
         } else {
             (holder as DashboardViewHolder).binding.expense = expenseList[position]
             holder.itemView.setOnClickListener {
-                navigator.onDialogClick(expenseList[position], type)
+                navigator.onDialogClick(expenseList[position])
             }
         }
     }

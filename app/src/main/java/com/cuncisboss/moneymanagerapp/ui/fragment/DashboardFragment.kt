@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,7 +18,6 @@ import com.cuncisboss.moneymanagerapp.util.Constants.reverseThis
 import com.cuncisboss.moneymanagerapp.util.TextHelper
 import com.cuncisboss.moneymanagerapp.viewmodel.ExpenseViewModel
 import kotlinx.android.synthetic.main.dialog_insert_update.view.*
-import org.koin.android.ext.android.bind
 import org.koin.android.ext.android.inject
 
 
@@ -90,7 +88,7 @@ class DashboardFragment : Fragment(), Navigator {
             }
             view.et_amount.setText(expense.nominal.toString())
             view.et_note.setText(expense.note)
-            view.btnSave.text = "Update"
+            view.btnSave.text = getString(R.string.update)
         }
 
         view.sp_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -133,7 +131,7 @@ class DashboardFragment : Fragment(), Navigator {
         dialogInsertUpdate()
     }
 
-    private fun dialogAlert(expense: ExpenseModel, type: String) {
+    private fun dialogAlert(expense: ExpenseModel) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
 
@@ -157,8 +155,8 @@ class DashboardFragment : Fragment(), Navigator {
         }
     }
 
-    override fun onDialogClick(expense: ExpenseModel, type: String) {
-        dialogAlert(expense, type)
+    override fun onDialogClick(expense: ExpenseModel) {
+        dialogAlert(expense)
     }
 }
 

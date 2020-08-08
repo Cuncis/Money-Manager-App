@@ -14,6 +14,7 @@
     <string name="income_is_empty">Income is empty</string>
     <string name="expense_is_empty">Expense is empty</string>
     <string name="item_more">Item More</string>
+    <string name="update">Update</string>
     <string-array name="type_options">
         <item>Income</item>
         <item>Expense</item>
