@@ -12,6 +12,8 @@ class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() 
 
     private var expenseList = arrayListOf<ExpenseModel>()
 
+    private var listener: ((expense: ExpenseModel) -> Unit)? = null
+
     inner class ExpenseViewHolder(val binding: ItemExpenseBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -29,11 +31,18 @@ class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() 
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         holder.binding.expense = expenseList[position]
+        holder.itemView.setOnClickListener {
+            listener?.invoke(expenseList[position])
+        }
     }
 
     fun submitList(newExpenseList: List<ExpenseModel>) {
         expenseList.clear()
         expenseList.addAll(newExpenseList)
         notifyDataSetChanged()
+    }
+
+    fun setListener(listener: (expense: ExpenseModel) -> Unit) {
+        this.listener = listener
     }
 }

@@ -17,6 +17,7 @@ import com.cuncisboss.moneymanagerapp.ui.Navigator
 import com.cuncisboss.moneymanagerapp.util.Constants.reverseThis
 import com.cuncisboss.moneymanagerapp.util.TextHelper
 import com.cuncisboss.moneymanagerapp.viewmodel.ExpenseViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_insert_update.view.*
 import org.koin.android.ext.android.inject
 
@@ -86,6 +87,7 @@ class DashboardFragment : Fragment(), Navigator {
             } else {
                 view.sp_type.setSelection(1)
             }
+            view.sp_type.isEnabled = false
             view.et_amount.setText(expense.nominal.toString())
             view.et_note.setText(expense.note)
             view.btnSave.text = getString(R.string.update)
@@ -109,19 +111,31 @@ class DashboardFragment : Fragment(), Navigator {
             dialog.cancel()
         }
         view.btnSave.setOnClickListener {
-            val amount = view.et_amount.text.toString().toLong()
-            val note = view.et_note.text.toString()
+            when {
+                view.et_amount.text.toString().isEmpty() -> {
+                    view.et_amount.error = "Amount field cannot be empty"
+                }
+                view.et_note.text.toString().isEmpty() -> {
+                    view.et_note.error = "Note field cannot be empty"
+                }
+                else -> {
+                    val amount = view.et_amount.text.toString().toLong()
+                    val note = view.et_note.text.toString()
 
-            if (expense.note.isNotEmpty()) {
-                viewModel.update(ExpenseModel(note, type, amount, expense.datetime, expense.id))
-            } else {
-                viewModel.insert(ExpenseModel(
-                    note,
-                    type,
-                    amount
-                ))
+                    if (expense.note.isNotEmpty()) {
+                        viewModel.update(ExpenseModel(note, type, amount, expense.datetime, expense.id))
+                        Snackbar.make(requireView(), "$type updated", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        viewModel.insert(ExpenseModel(
+                            note,
+                            type,
+                            amount
+                        ))
+                        Snackbar.make(requireView(), "$type inserted", Snackbar.LENGTH_LONG).show()
+                    }
+                    dialog.dismiss()
+                }
             }
-            dialog.dismiss()
         }
 
         dialog.show()
@@ -141,6 +155,7 @@ class DashboardFragment : Fragment(), Navigator {
                 dialogInsertUpdate(expense)
             } else {
                 viewModel.delete(expense)
+                Snackbar.make(requireView(), "Deleted", Snackbar.LENGTH_LONG).show()
             }
             dialog.dismiss()
         }

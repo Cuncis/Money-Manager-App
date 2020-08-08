@@ -39,6 +39,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="6dp"
                 android:textColor="@color/md_blue_50"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="22sp"
                 app:separate_text="@{String.valueOf(expense.nominal)}"
                 tools:text="Nominal" />
