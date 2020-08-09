@@ -1,5 +1,6 @@
 package com.cuncisboss.moneymanagerapp.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.cuncisboss.moneymanagerapp.R
 import com.cuncisboss.moneymanagerapp.databinding.FragmentExpenseBinding
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
+import com.cuncisboss.moneymanagerapp.util.Constants.KEY_CURRENCY
 import com.cuncisboss.moneymanagerapp.util.Constants.reverseThis
 import com.cuncisboss.moneymanagerapp.util.TextHelper
 import com.cuncisboss.moneymanagerapp.viewmodel.ExpenseViewModel
@@ -26,6 +28,7 @@ class ExpenseFragment : Fragment() {
     private lateinit var binding: FragmentExpenseBinding
 
     private val viewModel by inject<ExpenseViewModel>()
+    private val pref by inject<SharedPreferences>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +48,9 @@ class ExpenseFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.expenseTotal.observe(viewLifecycleOwner, Observer {
-            binding.totalExpense = TextHelper.longToString(it.toLong())
+            binding.totalExpense = String.format(getString(R.string.nominal_format),
+                pref.getString(KEY_CURRENCY, "").toString(),
+                TextHelper.longToString(it.toLong()))
         })
 
         viewModel.getAllExpense().observe(viewLifecycleOwner, Observer {

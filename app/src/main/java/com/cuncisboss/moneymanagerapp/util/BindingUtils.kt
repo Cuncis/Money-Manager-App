@@ -2,13 +2,15 @@ package com.cuncisboss.moneymanagerapp.util
 
 import android.view.View
 import androidx.databinding.BindingAdapter
+import com.cuncisboss.moneymanagerapp.R
 import com.cuncisboss.moneymanagerapp.adapter.DashboardAdapter
 import com.google.android.material.textview.MaterialTextView
 
 
-@BindingAdapter("separate_text")
-fun setSeparateTextView(textView: MaterialTextView, nominal: String) {
-    textView.text = String.format("%,d", nominal.toLong()).replace(',', '.')
+
+@BindingAdapter("currency", "separate_text")
+fun setSeparateTextView(textView: MaterialTextView, currency: String, nominal: String) {
+    textView.text = String.format("%s %s", currency, String.format("%,d", nominal.toLong()).replace(',', '.'))
 }
 
 @BindingAdapter("visibility_list")

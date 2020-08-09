@@ -1,8 +1,12 @@
 package com.cuncisboss.moneymanagerapp.di
 
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.cuncisboss.moneymanagerapp.db.ExpenseDatabase
 import com.cuncisboss.moneymanagerapp.util.Constants.EXPENSE_DB_NAME
+import com.cuncisboss.moneymanagerapp.util.Constants.PREF_NAME
 import com.cuncisboss.moneymanagerapp.viewmodel.ExpenseViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,5 +21,11 @@ val appModule = module {
         EXPENSE_DB_NAME
     ).build().expenseDao() }
 
-    viewModel { ExpenseViewModel(get()) }
+    single { providePref(androidApplication()) }
+
+    viewModel { ExpenseViewModel(get(), get()) }
+
 }
+
+fun providePref(app: Application): SharedPreferences =
+    app.getSharedPreferences(PREF_NAME, MODE_PRIVATE)

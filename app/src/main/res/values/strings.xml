@@ -15,6 +15,11 @@
     <string name="expense_is_empty">Expense is empty</string>
     <string name="item_more">Item More</string>
     <string name="update">Update</string>
+    <string name="rp">Rp</string>
+    <string name="dollar_logo">$</string>
+    <string name="euro_logo">€</string>
+    <string name="none">None</string>
+    <string name="nominal_format">%s %s</string>
     <string-array name="type_options">
         <item>Income</item>
         <item>Expense</item>

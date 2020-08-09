@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_none"
+        android:title="@string/none"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_dollar"
+        android:title="@string/dollar_logo"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_euro"
+        android:title="@string/euro_logo"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_rupiah"
+        android:title="@string/rp"
+        app:showAsAction="never" />
+</menu>

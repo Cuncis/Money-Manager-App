@@ -1,10 +1,9 @@
 package com.cuncisboss.moneymanagerapp.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -14,6 +13,7 @@ import com.cuncisboss.moneymanagerapp.R
 import com.cuncisboss.moneymanagerapp.databinding.FragmentDashboardBinding
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
 import com.cuncisboss.moneymanagerapp.ui.Navigator
+import com.cuncisboss.moneymanagerapp.util.Constants.KEY_CURRENCY
 import com.cuncisboss.moneymanagerapp.util.Constants.reverseThis
 import com.cuncisboss.moneymanagerapp.util.TextHelper
 import com.cuncisboss.moneymanagerapp.viewmodel.ExpenseViewModel
@@ -27,12 +27,14 @@ class DashboardFragment : Fragment(), Navigator {
     private lateinit var binding: FragmentDashboardBinding
 
     private val viewModel by inject<ExpenseViewModel>()
+    private val pref by inject<SharedPreferences>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -49,11 +51,15 @@ class DashboardFragment : Fragment(), Navigator {
 
     private fun observeViewModel() {
         viewModel.incomeTotal.observe(viewLifecycleOwner, Observer {
-            binding.totalIncome = TextHelper.longToString(it.toLong())
+            binding.totalIncome = String.format(getString(R.string.nominal_format),
+                pref.getString(KEY_CURRENCY, ""),
+                TextHelper.longToString(it.toLong()))
         })
 
         viewModel.expenseTotal.observe(viewLifecycleOwner, Observer {
-            binding.totalExpense = TextHelper.longToString(it.toLong())
+            binding.totalExpense = String.format(getString(R.string.nominal_format),
+                pref.getString(KEY_CURRENCY, ""),
+                TextHelper.longToString(it.toLong()))
         })
 
         viewModel.getAllIncome().observe(viewLifecycleOwner, Observer {
@@ -172,6 +178,33 @@ class DashboardFragment : Fragment(), Navigator {
 
     override fun onDialogClick(expense: ExpenseModel) {
         dialogAlert(expense)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_menu_currency, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_none -> {
+                pref.edit().putString(KEY_CURRENCY, "").apply()
+                findNavController().navigate(R.id.action_dashboardFragment_self)
+            }
+            R.id.action_dollar -> {
+                pref.edit().putString(KEY_CURRENCY, "$").apply()
+                findNavController().navigate(R.id.action_dashboardFragment_self)
+            }
+            R.id.action_euro -> {
+                pref.edit().putString(KEY_CURRENCY, "€").apply()
+                findNavController().navigate(R.id.action_dashboardFragment_self)
+            }
+            R.id.action_rupiah -> {
+                pref.edit().putString(KEY_CURRENCY, "Rp").apply()
+                findNavController().navigate(R.id.action_dashboardFragment_self)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 

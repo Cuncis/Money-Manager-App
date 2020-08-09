@@ -11,6 +11,9 @@ object Constants {
 
     const val LIMIT_ITEM = 5
 
+    const val PREF_NAME = "com.cuncisboss.moneymanagerapp.PREF_NAME"
+    const val KEY_CURRENCY = "NONE"
+
     fun List<ExpenseModel>.reverseThis() {
         (this as ArrayList).reverse()
     }

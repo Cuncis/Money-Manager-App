@@ -1,5 +1,6 @@
 package com.cuncisboss.moneymanagerapp.viewmodel
 
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -11,15 +12,16 @@ import com.cuncisboss.moneymanagerapp.adapter.ExpenseAdapter
 import com.cuncisboss.moneymanagerapp.db.ExpenseDao
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
 import com.cuncisboss.moneymanagerapp.ui.Navigator
+import com.cuncisboss.moneymanagerapp.util.Constants.KEY_CURRENCY
 import com.cuncisboss.moneymanagerapp.util.Constants.TAG
 import kotlinx.coroutines.launch
 
-class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
+class ExpenseViewModel(private val expenseDao: ExpenseDao, pref: SharedPreferences) : ViewModel() {
 
-    val incomeAdapter = DashboardAdapter("Income")
-    val expenseAdapter = DashboardAdapter("Expense")
+    val incomeAdapter = DashboardAdapter("Income", pref.getString(KEY_CURRENCY, "").toString())
+    val expenseAdapter = DashboardAdapter("Expense", pref.getString(KEY_CURRENCY, "").toString())
 
-    val adapter = ExpenseAdapter()
+    val adapter = ExpenseAdapter(pref.getString(KEY_CURRENCY, "").toString())
 
     var incomeTotal = MutableLiveData<String>()
     var expenseTotal = MutableLiveData<String>()

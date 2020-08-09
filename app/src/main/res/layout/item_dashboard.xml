@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="currency"
+            type="String" />
+        <variable
             name="expense"
             type="com.cuncisboss.moneymanagerapp.model.ExpenseModel" />
     </data>
@@ -43,6 +46,7 @@
                 android:ellipsize="end"
                 android:textSize="22sp"
                 app:separate_text="@{String.valueOf(expense.nominal)}"
+                app:currency="@{currency}"
                 tools:text="Nominal" />
 
             <com.google.android.material.textview.MaterialTextView

@@ -8,7 +8,7 @@ import com.cuncisboss.moneymanagerapp.R
 import com.cuncisboss.moneymanagerapp.databinding.ItemExpenseBinding
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
 
-class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
+class ExpenseAdapter(val currency: String) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     private var expenseList = arrayListOf<ExpenseModel>()
 
@@ -31,6 +31,7 @@ class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() 
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         holder.binding.expense = expenseList[position]
+        holder.binding.currency = currency
         holder.itemView.setOnClickListener {
             listener?.invoke(expenseList[position])
         }

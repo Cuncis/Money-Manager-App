@@ -1,7 +1,7 @@
 package com.cuncisboss.moneymanagerapp.adapter
 
 
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,9 +12,8 @@ import com.cuncisboss.moneymanagerapp.databinding.ItemMoreBinding
 import com.cuncisboss.moneymanagerapp.model.ExpenseModel
 import com.cuncisboss.moneymanagerapp.ui.Navigator
 import com.cuncisboss.moneymanagerapp.util.Constants.LIMIT_ITEM
-import com.cuncisboss.moneymanagerapp.util.Constants.TAG
 
-class DashboardAdapter(val type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DashboardAdapter(val type: String, private val currency: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var expenseList = arrayListOf<ExpenseModel>()
 
@@ -71,6 +70,7 @@ class DashboardAdapter(val type: String) : RecyclerView.Adapter<RecyclerView.Vie
             }
         } else {
             (holder as DashboardViewHolder).binding.expense = expenseList[position]
+            holder.binding.currency = currency
             holder.itemView.setOnClickListener {
                 navigator.onDialogClick(expenseList[position])
             }
@@ -81,12 +81,6 @@ class DashboardAdapter(val type: String) : RecyclerView.Adapter<RecyclerView.Vie
         expenseList.clear()
         expenseList.addAll(newExpenseList)
         notifyDataSetChanged()
-    }
-
-    fun removeItem(position: Int) {
-        expenseList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, expenseList.size)
     }
 
     fun setNavigator(navigator: Navigator) {
