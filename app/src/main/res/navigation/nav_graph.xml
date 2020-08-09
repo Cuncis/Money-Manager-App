@@ -18,7 +18,10 @@
             app:destination="@id/expenseFragment" />
         <action
             android:id="@+id/action_dashboardFragment_self"
-            app:destination="@id/dashboardFragment" />
+            app:destination="@id/dashboardFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/incomeFragment"
