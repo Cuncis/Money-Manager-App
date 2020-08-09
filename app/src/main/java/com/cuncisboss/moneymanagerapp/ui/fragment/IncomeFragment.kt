@@ -124,5 +124,4 @@ class IncomeFragment : Fragment() {
 
         dialog.show()
     }
-
 }
