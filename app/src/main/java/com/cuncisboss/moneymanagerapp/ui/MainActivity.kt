@@ -14,5 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         bottom_navigation_view.setupWithNavController(nav_host_fragment.findNavController())
+        bottom_navigation_view.setOnNavigationItemReselectedListener { /* NO-OP */ }
     }
 }
